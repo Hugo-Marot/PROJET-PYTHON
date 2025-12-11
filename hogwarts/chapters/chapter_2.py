@@ -1,3 +1,7 @@
+from hogwarts.universe.character import *
+from hogwarts.utils.input_utils import *
+import os
+
 def meet_friends(character):
     """Handle the meetings with Ron, Hermione and Draco on the Hogwarts Express.
 
@@ -90,3 +94,42 @@ def welcome_message():
 
     input("Press Enter to continue... ")
 
+def enter_common_room(character):
+    """Place the player in their house common room and display its description."""
+
+    house_name = character.get("House")
+
+    if not house_name:
+        print("Error: The character has no assigned house.")
+        return
+
+    # Load the house data
+    # Adapt path if needed!
+    house_data = load_file("data/houses.json")
+
+    if house_data is None:
+        print("Error: Could not load houses.json")
+        return
+
+    # Retrieve info for the player's house
+    info = house_data.get(house_name)
+
+    if info is None:
+        print(f"Error: House '{house_name}' not found in houses.json")
+        return
+
+    emoji = info.get("emoji", "")
+    description = info.get("description", "")
+    welcome = info.get("welcome", "")
+    colors = info.get("colors", [])
+
+    print("\nYou follow the prefects through the castle corridors...")
+
+    # Description
+    print(f"{emoji} {description}")
+
+    # Welcome message
+    print(f"✨ {welcome}")
+
+    # House colors
+    print(f"Your house colors: {', '.join(colors)}\n")
